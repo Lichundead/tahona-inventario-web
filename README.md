@@ -81,10 +81,30 @@ cd backend && uv run alembic revision --autogenerate -m "describe el cambio"
 cd .. && bash scripts/generate-client.sh   # regenera frontend/src/client
 ```
 
-Pruebas del backend: `cd backend && uv run bash scripts/test.sh`. Las pruebas borran todos los usuarios y el inventario de la base de datos que usan, así que no las corras contra datos que quieras conservar.
-
 Sin Docker: apunta `DATABASE_URL` a tu propio PostgreSQL, por ejemplo
 `DATABASE_URL=postgresql://postgres:x@localhost:5433/app uv run fastapi dev`. Sin Mailpit, los correos de recuperación de contraseña no se envían.
+
+## Pruebas
+
+Pruebas del backend: `cd backend && uv run bash scripts/test.sh` (sin bash: `cd backend && uv run pytest`).
+
+> **Cuidado:** las pruebas del backend usan la misma base de datos que la aplicación, la de `DATABASE_URL` en `.env`. Al correrlas se borran **todos** los usuarios, categorías, productos, movimientos y alertas de tu base de desarrollo. Eso incluye al usuario administrador: para volver a entrar, corre `uv run python app/initial_data.py` en `backend/`, que lo crea de nuevo. Nunca las corras contra una base compartida o con datos que quieras conservar.
+
+Pruebas del frontend (end-to-end, con Playwright):
+
+1. La primera vez, instala el navegador que usan las pruebas: `cd frontend && bunx playwright install chromium`.
+2. Arranca el backend (`uv run fastapi dev` en `backend/`). Playwright arranca solo el frontend; el backend tiene que estar corriendo.
+3. Desde la carpeta principal: `bun run test`. Para ver las pruebas en una ventana: `bun run test:ui`.
+
+Las pruebas end-to-end no borran nada, pero dejan en la base de datos los usuarios, categorías y productos que crean.
+
+## Trabajo en equipo
+
+El trabajo pendiente está repartido en [`tasks/plan.md`](tasks/plan.md), en la sección "Reparto del equipo": quién hace cada tarea y las reglas para no pisarse. El detalle de cada tarea, con sus criterios de aceptación, está en [`tasks/todo.md`](tasks/todo.md).
+
+- Una rama y un PR por tarea, creados desde `main`, por ejemplo `feat/t04-entradas`. Antes de abrir el PR: `git pull --rebase origin main`.
+- Si hay conflicto en `frontend/src/client/`, no lo resuelvas a mano: quédate con la versión de `main` y vuelve a correr `bash scripts/generate-client.sh`.
+- Al terminar una tarea, marca sus casillas en `tasks/todo.md` dentro del mismo PR.
 
 ## Problemas frecuentes
 
@@ -106,6 +126,10 @@ Sin Docker: apunta `DATABASE_URL` a tu propio PostgreSQL, por ejemplo
 | Respuesta HTTP 409 a los errores de integridad (RT-06) | `backend/app/main.py` |
 | Pruebas de los criterios de aceptación CA-02 a CA-10 y RNF-010 | `backend/tests/api/routes/test_inventario.py`, `backend/tests/crud/test_transaccion.py` |
 | Páginas del frontend | `frontend/src/routes/_layout/` |
+| Componentes de cada página (por ejemplo, las columnas de la tabla de productos) | `frontend/src/components/<Dominio>/`, como `frontend/src/components/Productos/` |
+| Pruebas end-to-end | `frontend/tests/` |
+| Función de las pruebas end-to-end que crea categorías, productos y entradas por la API | `frontend/tests/utils/inventario.ts` |
+| Plan, reparto del equipo y lista de tareas | `tasks/plan.md`, `tasks/todo.md` |
 
 ## Decisiones respecto a la propuesta
 
