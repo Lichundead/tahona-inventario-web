@@ -1,10 +1,22 @@
 import uuid
 from typing import Any
 
-from sqlmodel import Session, select
+from sqlmodel import Session, case, col, func, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models import (
+    Alerta,
+    EstadoAlerta,
+    Producto,
+    TipoAlerta,
+    TipoTransaccion,
+    Transaccion,
+    TransaccionCreate,
+    User,
+    UserCreate,
+    UserUpdate,
+    get_datetime_utc,
+)
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -60,9 +72,82 @@ def authenticate(*, session: Session, email: str, password: str) -> User | None:
     return db_user
 
 
-def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -> Item:
-    db_item = Item.model_validate(item_in, update={"owner_id": owner_id})
-    session.add(db_item)
+class StockInsuficiente(Exception):
+    def __init__(self, disponible: int) -> None:
+        self.disponible = disponible
+
+
+def _cantidad_con_signo() -> Any:
+    return case(
+        (col(Transaccion.tipo) == TipoTransaccion.salida, -col(Transaccion.cantidad)),
+        else_=col(Transaccion.cantidad),
+    )
+
+
+def stock_por_producto() -> Any:
+    """Subquery (producto_id, stock) for joining onto producto queries. RN-01."""
+    return (
+        select(
+            col(Transaccion.producto_id).label("producto_id"),
+            func.sum(_cantidad_con_signo()).label("stock"),
+        )
+        .group_by(col(Transaccion.producto_id))
+        .subquery()
+    )
+
+
+def get_stock(*, session: Session, producto_id: uuid.UUID) -> int:
+    statement = select(func.coalesce(func.sum(_cantidad_con_signo()), 0)).where(
+        Transaccion.producto_id == producto_id
+    )
+    return int(session.exec(statement).one())
+
+
+def sincronizar_alerta_stock(*, session: Session, producto: Producto) -> None:
+    """RN-10/RN-11: one active alert while stock < stock_minimo, closed once it recovers."""
+    stock = get_stock(session=session, producto_id=producto.id)
+    activa = session.exec(
+        select(Alerta).where(
+            Alerta.producto_id == producto.id,
+            Alerta.tipo == TipoAlerta.stock_minimo,
+            Alerta.estado == EstadoAlerta.activa,
+        )
+    ).first()
+    if stock < producto.stock_minimo and not activa:
+        session.add(
+            Alerta(
+                tipo=TipoAlerta.stock_minimo,
+                producto_id=producto.id,
+                mensaje=f"{producto.nombre}: quedan {stock} {producto.unidad} "
+                f"(mínimo {producto.stock_minimo})",
+            )
+        )
+    elif stock >= producto.stock_minimo and activa:
+        activa.estado = EstadoAlerta.cerrada
+        activa.fecha_cierre = get_datetime_utc()
+        session.add(activa)
+
+
+def registrar_transaccion(
+    *,
+    session: Session,
+    producto: Producto,
+    transaccion_in: TransaccionCreate,
+    usuario_id: uuid.UUID,
+) -> Transaccion:
+    # RNF-010: lock the producto row so concurrent salidas can't both pass the stock check
+    session.refresh(producto, with_for_update=True)
+    if transaccion_in.tipo == TipoTransaccion.salida:
+        disponible = get_stock(session=session, producto_id=producto.id)
+        if transaccion_in.cantidad > disponible:  # RN-04
+            session.rollback()
+            raise StockInsuficiente(disponible)
+    transaccion = Transaccion.model_validate(
+        transaccion_in, update={"usuario_id": usuario_id}
+    )
+    session.add(transaccion)
+    session.flush()
+    sincronizar_alerta_stock(session=session, producto=producto)
     session.commit()
-    session.refresh(db_item)
-    return db_item
+    session.refresh(transaccion)
+    return transaccion
