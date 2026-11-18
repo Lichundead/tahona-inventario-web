@@ -6,3 +6,13 @@ backend/app/frontend/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+.DS_Store
+.env
+graphify-out/
+/graphify-out/
+graphify-out.zip
+# Library Skills symlinks into .venv, recreated by `uvx library-skills`
+.agents/skills/fastapi
+.agents/skills/sqlmodel
+.claude/skills/fastapi
+.claude/skills/sqlmodel
