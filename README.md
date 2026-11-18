@@ -1,88 +1,55 @@
-# Full Stack FastAPI Template
+# Tahona Inventario
 
-[![Test Docker Compose](../../actions/workflows/test-docker-compose.yml/badge.svg)](../../actions/workflows/test-docker-compose.yml)
-[![Test Backend](../../actions/workflows/test-backend.yml/badge.svg)](../../actions/workflows/test-backend.yml)
+Aplicación web de inventario para la Pastelería Tahona. Basada en [fastapi/full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template): FastAPI + SQLModel + PostgreSQL en el backend, React 19 + TanStack Router/Query + Tailwind en el frontend.
 
-## Technology Stack and Features
+## Ejecutar en local
 
-- ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
-  - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
-  - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
-  - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
-- 🚀 [React](https://react.dev) for the frontend.
-  - 🧩 Built into the backend application and served by FastAPI on the same domain as the API.
-  - 💃 Using TypeScript, hooks, [Vite](https://vitejs.dev), and other parts of a modern frontend stack.
-  - 🎨 [Tailwind CSS](https://tailwindcss.com) and [shadcn/ui](https://ui.shadcn.com) for the frontend components.
-  - 🤖 An automatically generated frontend client.
-  - 🧪 [Playwright](https://playwright.dev) for end-to-end testing.
-  - 🦇 Dark mode support.
-- ☁️ [FastAPI Cloud](https://fastapicloud.com) for deployment.
-- 🐋 [Docker Compose](https://www.docker.com) for local services and self-hosted deployment.
-  - 📞 [Traefik](https://traefik.io) as a reverse proxy with automatic HTTPS.
-- 🔒 Secure password hashing by default.
-- 🔑 JWT (JSON Web Token) authentication.
-- 📫 Email-based password recovery.
-- ✉️ [React Email](https://react.email) for email templates.
-- 📬 [Mailpit](https://mailpit.axllent.org) for local email testing during development.
-- ✅ Tests with [Pytest](https://pytest.org).
-- 🏭 CI (continuous integration) and CD (continuous deployment) based on GitHub Actions.
+Requisitos: [uv](https://docs.astral.sh/uv/), [bun](https://bun.sh) y Docker (o un PostgreSQL propio).
 
-### Dashboard Login
+```bash
+cp .env.example .env && cp frontend/.env.example frontend/.env
+docker compose up -d db mailpit          # PostgreSQL y correo de prueba
 
-![Dashboard login screenshot](img/login.png)
+cd backend
+uv sync
+uv run bash scripts/prestart.sh          # migraciones + superusuario inicial
+uv run fastapi dev                       # API en http://localhost:8000/docs
 
-### Dashboard - Admin
+cd ..                                     # en otra terminal
+bun install
+bun run dev                              # frontend en http://localhost:5173
+```
 
-![Admin dashboard screenshot](img/dashboard.png)
+Sin Docker: apunta `DATABASE_URL` a tu PostgreSQL, por ejemplo
+`DATABASE_URL=postgresql://postgres:x@localhost:5433/app uv run fastapi dev`.
 
-### Dashboard - Items
+Superusuario inicial: `FIRST_SUPERUSER` / `FIRST_SUPERUSER_PASSWORD` en `.env` (copiado de `.env.example`, no se versiona).
 
-![Items dashboard screenshot](img/dashboard-items.png)
+Después de cambiar modelos o rutas del backend:
 
-### Dashboard - Dark Mode
+```bash
+cd backend && uv run alembic revision --autogenerate -m "describe el cambio"
+cd .. && bash scripts/generate-client.sh   # regenera frontend/src/client
+```
 
-![Dark mode dashboard screenshot](img/dashboard-dark.png)
+Pruebas del backend: `cd backend && uv run bash scripts/test.sh`.
 
-### React Email Templates
+## Dónde está cada cosa
 
-![Email templates screenshot](img/react-email.png)
+| Qué | Dónde |
+| --- | --- |
+| Modelos y esquemas (Categoria, Producto, Transaccion, Alerta) | `backend/app/models.py` |
+| Cálculo de stock, bloqueo de salidas concurrentes, alertas de stock mínimo | `backend/app/crud.py` |
+| Endpoints `/api/v1/categorias`, `/productos`, `/transacciones`, `/alertas` | `backend/app/api/routes/` |
+| Respuesta HTTP 409 a los errores de integridad (RT-06) | `backend/app/main.py` |
+| Pruebas de los criterios de aceptación CA-02 a CA-10 y RNF-010 | `backend/tests/api/routes/test_inventario.py`, `backend/tests/crud/test_transaccion.py` |
+| Páginas del frontend | `frontend/src/routes/_layout/` |
 
-### Mailpit - Local Email Testing
+## Decisiones respecto a la propuesta
 
-![Mailpit screenshot](img/mailpit.png)
-
-### Interactive API Documentation
-
-![API docs](img/docs.png)
-
-## How to Use It
-
-Click the **Use this template** button at the top of this page to create a new repository.
-
-## Backend Development
-
-Backend docs: [backend/README.md](./backend/README.md).
-
-## Frontend Development
-
-Frontend docs: [frontend/README.md](./frontend/README.md).
-
-## Deployment
-
-FastAPI Cloud deployment: [deployment.md](./deployment.md).
-
-Self-hosted deployment with Docker Compose: [deployment-docker-compose.md](./deployment-docker-compose.md).
-
-## Development
-
-General development docs: [development.md](./development.md).
-
-This includes the local FastAPI and Vite workflow, Docker Compose services, `.env` configuration, and more.
-
-## Release Notes
-
-Check the file [release-notes.md](./release-notes.md).
-
-## License
-
-The Full Stack FastAPI Template is licensed under the terms of the MIT license.
+- RT-01: la plantilla ya no usa Copier, así que se copió con "Use this template".
+- RN-03: las cantidades siguen siendo enteras. Cada producto tiene un campo `unidad` (bulto, botella, unidad) para saber qué se cuenta.
+- RF-019 y CA-10: la Tabla 14 de la propuesta trata el ajuste como un tercer tipo de transacción. Aquí un ajuste es una entrada o salida con `es_ajuste = true`, que solo registra el superusuario, y su cantidad siempre es positiva.
+- RF-023: cada producto tiene `alerta_caducidad`, activada por defecto, y con ella cada entrada exige `fecha_vencimiento`. Falta generar la alerta cuando un lote vence en N días y el producto aún tiene stock. Esa alerta no sabrá qué lote consumió cada salida.
+- RT-06: la propuesta menciona el código `23503`, pero PostgreSQL responde `23001` cuando un `ON DELETE RESTRICT` bloquea un borrado. La API responde 409 en los dos casos.
+- RN-13: no hay registro abierto. Se quitaron `/users/signup` y la opción de que cada usuario elimine su propia cuenta.
