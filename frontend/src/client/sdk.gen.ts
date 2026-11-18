@@ -2,7 +2,7 @@
 
 import { type Client, type Options as Options2, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { itemsCreateItemData, itemsCreateItemErrors, itemsCreateItemResponses, itemsDeleteItemData, itemsDeleteItemErrors, itemsDeleteItemResponses, itemsReadItemData, itemsReadItemErrors, itemsReadItemResponses, itemsReadItemsData, itemsReadItemsErrors, itemsReadItemsResponses, itemsUpdateItemData, itemsUpdateItemErrors, itemsUpdateItemResponses, loginLoginAccessTokenData, loginLoginAccessTokenErrors, loginLoginAccessTokenResponses, loginRecoverPasswordData, loginRecoverPasswordErrors, loginRecoverPasswordHtmlContentData, loginRecoverPasswordHtmlContentErrors, loginRecoverPasswordHtmlContentResponses, loginRecoverPasswordResponses, loginResetPasswordData, loginResetPasswordErrors, loginResetPasswordResponses, loginTestTokenData, loginTestTokenResponses, privateCreateUserData, privateCreateUserErrors, privateCreateUserResponses, usersCreateUserData, usersCreateUserErrors, usersCreateUserResponses, usersDeleteUserData, usersDeleteUserErrors, usersDeleteUserMeData, usersDeleteUserMeResponses, usersDeleteUserResponses, usersReadUserByIdData, usersReadUserByIdErrors, usersReadUserByIdResponses, usersReadUserMeData, usersReadUserMeResponses, usersReadUsersData, usersReadUsersErrors, usersReadUsersResponses, usersRegisterUserData, usersRegisterUserErrors, usersRegisterUserResponses, usersUpdatePasswordMeData, usersUpdatePasswordMeErrors, usersUpdatePasswordMeResponses, usersUpdateUserData, usersUpdateUserErrors, usersUpdateUserMeData, usersUpdateUserMeErrors, usersUpdateUserMeResponses, usersUpdateUserResponses, utilsHealthCheckData, utilsHealthCheckResponses, utilsTestEmailData, utilsTestEmailErrors, utilsTestEmailResponses } from './types.gen';
+import type { alertasReadAlertasData, alertasReadAlertasErrors, alertasReadAlertasResponses, categoriasCreateCategoriaData, categoriasCreateCategoriaErrors, categoriasCreateCategoriaResponses, categoriasDeleteCategoriaData, categoriasDeleteCategoriaErrors, categoriasDeleteCategoriaResponses, categoriasReadCategoriasData, categoriasReadCategoriasErrors, categoriasReadCategoriasResponses, categoriasUpdateCategoriaData, categoriasUpdateCategoriaErrors, categoriasUpdateCategoriaResponses, loginLoginAccessTokenData, loginLoginAccessTokenErrors, loginLoginAccessTokenResponses, loginRecoverPasswordData, loginRecoverPasswordErrors, loginRecoverPasswordHtmlContentData, loginRecoverPasswordHtmlContentErrors, loginRecoverPasswordHtmlContentResponses, loginRecoverPasswordResponses, loginResetPasswordData, loginResetPasswordErrors, loginResetPasswordResponses, loginTestTokenData, loginTestTokenResponses, privateCreateUserData, privateCreateUserErrors, privateCreateUserResponses, productosCreateProductoData, productosCreateProductoErrors, productosCreateProductoResponses, productosDeleteProductoData, productosDeleteProductoErrors, productosDeleteProductoResponses, productosReadProductoData, productosReadProductoErrors, productosReadProductoResponses, productosReadProductosData, productosReadProductosErrors, productosReadProductosResponses, productosUpdateProductoData, productosUpdateProductoErrors, productosUpdateProductoResponses, transaccionesCreateTransaccionData, transaccionesCreateTransaccionErrors, transaccionesCreateTransaccionResponses, transaccionesReadTransaccionesData, transaccionesReadTransaccionesErrors, transaccionesReadTransaccionesResponses, usersCreateUserData, usersCreateUserErrors, usersCreateUserResponses, usersDeleteUserData, usersDeleteUserErrors, usersDeleteUserResponses, usersReadUserByIdData, usersReadUserByIdErrors, usersReadUserByIdResponses, usersReadUserMeData, usersReadUserMeResponses, usersReadUsersData, usersReadUsersErrors, usersReadUsersResponses, usersUpdatePasswordMeData, usersUpdatePasswordMeErrors, usersUpdatePasswordMeResponses, usersUpdateUserData, usersUpdateUserErrors, usersUpdateUserMeData, usersUpdateUserMeErrors, usersUpdateUserMeResponses, usersUpdateUserResponses, utilsHealthCheckData, utilsHealthCheckResponses, utilsTestEmailData, utilsTestEmailErrors, utilsTestEmailResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -130,20 +130,6 @@ export class UsersService {
     }
     
     /**
-     * Delete User Me
-     *
-     * Delete own user.
-     */
-    public static deleteUserMe<ThrowOnError extends boolean = true>(options?: Options<usersDeleteUserMeData, ThrowOnError>) {
-        return (options?.client ?? client).delete<usersDeleteUserMeResponses, unknown, ThrowOnError>({
-            responseType: 'json',
-            security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/users/me',
-            ...options
-        });
-    }
-    
-    /**
      * Read User Me
      *
      * Get current user.
@@ -185,23 +171,6 @@ export class UsersService {
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
             url: '/api/v1/users/me/password',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-    
-    /**
-     * Register User
-     *
-     * Create new user without the need to be logged in.
-     */
-    public static registerUser<ThrowOnError extends boolean = true>(options: Options<usersRegisterUserData, ThrowOnError>) {
-        return (options.client ?? client).post<usersRegisterUserResponses, usersRegisterUserErrors, ThrowOnError>({
-            responseType: 'json',
-            url: '/api/v1/users/signup',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -284,31 +253,31 @@ export class UtilsService {
     }
 }
 
-export class ItemsService {
+export class CategoriasService {
     /**
-     * Read Items
+     * Read Categorias
      *
-     * Retrieve items.
+     * Retrieve categorías.
      */
-    public static readItems<ThrowOnError extends boolean = true>(options?: Options<itemsReadItemsData, ThrowOnError>) {
-        return (options?.client ?? client).get<itemsReadItemsResponses, itemsReadItemsErrors, ThrowOnError>({
+    public static readCategorias<ThrowOnError extends boolean = true>(options?: Options<categoriasReadCategoriasData, ThrowOnError>) {
+        return (options?.client ?? client).get<categoriasReadCategoriasResponses, categoriasReadCategoriasErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/',
+            url: '/api/v1/categorias/',
             ...options
         });
     }
     
     /**
-     * Create Item
+     * Create Categoria
      *
-     * Create new item.
+     * Create new categoría.
      */
-    public static createItem<ThrowOnError extends boolean = true>(options: Options<itemsCreateItemData, ThrowOnError>) {
-        return (options.client ?? client).post<itemsCreateItemResponses, itemsCreateItemErrors, ThrowOnError>({
+    public static createCategoria<ThrowOnError extends boolean = true>(options: Options<categoriasCreateCategoriaData, ThrowOnError>) {
+        return (options.client ?? client).post<categoriasCreateCategoriaResponses, categoriasCreateCategoriaErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/',
+            url: '/api/v1/categorias/',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -318,48 +287,164 @@ export class ItemsService {
     }
     
     /**
-     * Delete Item
+     * Delete Categoria
      *
-     * Delete an item.
+     * Delete a categoría. RN-08: fails with 409 while it has productos.
      */
-    public static deleteItem<ThrowOnError extends boolean = true>(options: Options<itemsDeleteItemData, ThrowOnError>) {
-        return (options.client ?? client).delete<itemsDeleteItemResponses, itemsDeleteItemErrors, ThrowOnError>({
+    public static deleteCategoria<ThrowOnError extends boolean = true>(options: Options<categoriasDeleteCategoriaData, ThrowOnError>) {
+        return (options.client ?? client).delete<categoriasDeleteCategoriaResponses, categoriasDeleteCategoriaErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/{id}',
+            url: '/api/v1/categorias/{id}',
             ...options
         });
     }
     
     /**
-     * Read Item
+     * Update Categoria
      *
-     * Get item by ID.
+     * Update a categoría.
      */
-    public static readItem<ThrowOnError extends boolean = true>(options: Options<itemsReadItemData, ThrowOnError>) {
-        return (options.client ?? client).get<itemsReadItemResponses, itemsReadItemErrors, ThrowOnError>({
+    public static updateCategoria<ThrowOnError extends boolean = true>(options: Options<categoriasUpdateCategoriaData, ThrowOnError>) {
+        return (options.client ?? client).patch<categoriasUpdateCategoriaResponses, categoriasUpdateCategoriaErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/{id}',
-            ...options
-        });
-    }
-    
-    /**
-     * Update Item
-     *
-     * Update an item.
-     */
-    public static updateItem<ThrowOnError extends boolean = true>(options: Options<itemsUpdateItemData, ThrowOnError>) {
-        return (options.client ?? client).put<itemsUpdateItemResponses, itemsUpdateItemErrors, ThrowOnError>({
-            responseType: 'json',
-            security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/{id}',
+            url: '/api/v1/categorias/{id}',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
                 ...options.headers
             }
+        });
+    }
+}
+
+export class ProductosService {
+    /**
+     * Read Productos
+     *
+     * Retrieve productos with their current stock.
+     */
+    public static readProductos<ThrowOnError extends boolean = true>(options?: Options<productosReadProductosData, ThrowOnError>) {
+        return (options?.client ?? client).get<productosReadProductosResponses, productosReadProductosErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/productos/',
+            ...options
+        });
+    }
+    
+    /**
+     * Create Producto
+     *
+     * Create new producto.
+     */
+    public static createProducto<ThrowOnError extends boolean = true>(options: Options<productosCreateProductoData, ThrowOnError>) {
+        return (options.client ?? client).post<productosCreateProductoResponses, productosCreateProductoErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/productos/',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Delete Producto
+     *
+     * Delete a producto. RN-07: fails with 409 once it has transacciones.
+     */
+    public static deleteProducto<ThrowOnError extends boolean = true>(options: Options<productosDeleteProductoData, ThrowOnError>) {
+        return (options.client ?? client).delete<productosDeleteProductoResponses, productosDeleteProductoErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/productos/{id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Read Producto
+     *
+     * Get producto by ID.
+     */
+    public static readProducto<ThrowOnError extends boolean = true>(options: Options<productosReadProductoData, ThrowOnError>) {
+        return (options.client ?? client).get<productosReadProductoResponses, productosReadProductoErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/productos/{id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Update Producto
+     *
+     * Update a producto.
+     */
+    public static updateProducto<ThrowOnError extends boolean = true>(options: Options<productosUpdateProductoData, ThrowOnError>) {
+        return (options.client ?? client).patch<productosUpdateProductoResponses, productosUpdateProductoErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/productos/{id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+}
+
+export class TransaccionesService {
+    /**
+     * Read Transacciones
+     *
+     * Retrieve transacciones, newest first, optionally for one producto.
+     */
+    public static readTransacciones<ThrowOnError extends boolean = true>(options?: Options<transaccionesReadTransaccionesData, ThrowOnError>) {
+        return (options?.client ?? client).get<transaccionesReadTransaccionesResponses, transaccionesReadTransaccionesErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/transacciones/',
+            ...options
+        });
+    }
+    
+    /**
+     * Create Transaccion
+     *
+     * Register an entrada or salida. The stock is recalculated and alerts updated.
+     */
+    public static createTransaccion<ThrowOnError extends boolean = true>(options: Options<transaccionesCreateTransaccionData, ThrowOnError>) {
+        return (options.client ?? client).post<transaccionesCreateTransaccionResponses, transaccionesCreateTransaccionErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/transacciones/',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+}
+
+export class AlertasService {
+    /**
+     * Read Alertas
+     *
+     * Retrieve alertas, active ones by default. Pass no estado to get all.
+     */
+    public static readAlertas<ThrowOnError extends boolean = true>(options?: Options<alertasReadAlertasData, ThrowOnError>) {
+        return (options?.client ?? client).get<alertasReadAlertasResponses, alertasReadAlertasErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/alertas/',
+            ...options
         });
     }
 }

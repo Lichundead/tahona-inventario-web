@@ -5,6 +5,52 @@ export type ClientOptions = {
 };
 
 /**
+ * AlertaPublic
+ */
+export type AlertaPublic = {
+    /**
+     * Id
+     */
+    id: string;
+    tipo: TipoAlerta;
+    estado: EstadoAlerta;
+    /**
+     * Mensaje
+     */
+    mensaje: string;
+    /**
+     * Fecha Generacion
+     */
+    fecha_generacion: string;
+    /**
+     * Fecha Cierre
+     */
+    fecha_cierre: string | null;
+    /**
+     * Producto Id
+     */
+    producto_id: string;
+    /**
+     * Transaccion Id
+     */
+    transaccion_id: string | null;
+};
+
+/**
+ * AlertasPublic
+ */
+export type AlertasPublic = {
+    /**
+     * Data
+     */
+    data: Array<AlertaPublic>;
+    /**
+     * Count
+     */
+    count: number;
+};
+
+/**
  * Body_login-login_access_token
  */
 export type Body_login_login_access_token = {
@@ -35,6 +81,59 @@ export type Body_login_login_access_token = {
 };
 
 /**
+ * CategoriaCreate
+ */
+export type CategoriaCreate = {
+    /**
+     * Nombre
+     */
+    nombre: string;
+};
+
+/**
+ * CategoriaPublic
+ */
+export type CategoriaPublic = {
+    /**
+     * Nombre
+     */
+    nombre: string;
+    /**
+     * Id
+     */
+    id: string;
+};
+
+/**
+ * CategoriaUpdate
+ */
+export type CategoriaUpdate = {
+    /**
+     * Nombre
+     */
+    nombre?: string | null;
+};
+
+/**
+ * CategoriasPublic
+ */
+export type CategoriasPublic = {
+    /**
+     * Data
+     */
+    data: Array<CategoriaPublic>;
+    /**
+     * Count
+     */
+    count: number;
+};
+
+/**
+ * EstadoAlerta
+ */
+export type EstadoAlerta = 'activa' | 'cerrada';
+
+/**
  * HTTPValidationError
  */
 export type HTTPValidationError = {
@@ -42,74 +141,6 @@ export type HTTPValidationError = {
      * Detail
      */
     detail?: Array<ValidationError>;
-};
-
-/**
- * ItemCreate
- */
-export type ItemCreate = {
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Description
-     */
-    description?: string | null;
-};
-
-/**
- * ItemPublic
- */
-export type ItemPublic = {
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Description
-     */
-    description?: string | null;
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Owner Id
-     */
-    owner_id: string;
-    /**
-     * Created At
-     */
-    created_at?: string | null;
-};
-
-/**
- * ItemUpdate
- */
-export type ItemUpdate = {
-    /**
-     * Title
-     */
-    title?: string | null;
-    /**
-     * Description
-     */
-    description?: string | null;
-};
-
-/**
- * ItemsPublic
- */
-export type ItemsPublic = {
-    /**
-     * Data
-     */
-    data: Array<ItemPublic>;
-    /**
-     * Count
-     */
-    count: number;
 };
 
 /**
@@ -159,6 +190,120 @@ export type PrivateUserCreate = {
 };
 
 /**
+ * ProductoCreate
+ */
+export type ProductoCreate = {
+    /**
+     * Nombre
+     */
+    nombre: string;
+    /**
+     * Unidad
+     */
+    unidad?: string;
+    /**
+     * Stock Minimo
+     */
+    stock_minimo?: number;
+    /**
+     * Alerta Caducidad
+     */
+    alerta_caducidad?: boolean;
+    /**
+     * Categoria Id
+     */
+    categoria_id: string;
+};
+
+/**
+ * ProductoPublic
+ */
+export type ProductoPublic = {
+    /**
+     * Nombre
+     */
+    nombre: string;
+    /**
+     * Unidad
+     */
+    unidad?: string;
+    /**
+     * Stock Minimo
+     */
+    stock_minimo?: number;
+    /**
+     * Alerta Caducidad
+     */
+    alerta_caducidad?: boolean;
+    /**
+     * Categoria Id
+     */
+    categoria_id: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Created At
+     */
+    created_at?: string | null;
+    /**
+     * Stock
+     */
+    stock?: number;
+};
+
+/**
+ * ProductoUpdate
+ */
+export type ProductoUpdate = {
+    /**
+     * Nombre
+     */
+    nombre?: string | null;
+    /**
+     * Unidad
+     */
+    unidad?: string | null;
+    /**
+     * Stock Minimo
+     */
+    stock_minimo?: number | null;
+    /**
+     * Alerta Caducidad
+     */
+    alerta_caducidad?: boolean | null;
+    /**
+     * Categoria Id
+     */
+    categoria_id?: string | null;
+};
+
+/**
+ * ProductosPublic
+ */
+export type ProductosPublic = {
+    /**
+     * Data
+     */
+    data: Array<ProductoPublic>;
+    /**
+     * Count
+     */
+    count: number;
+};
+
+/**
+ * TipoAlerta
+ */
+export type TipoAlerta = 'stock_minimo' | 'caducidad';
+
+/**
+ * TipoTransaccion
+ */
+export type TipoTransaccion = 'entrada' | 'salida';
+
+/**
  * Token
  */
 export type Token = {
@@ -170,6 +315,86 @@ export type Token = {
      * Token Type
      */
     token_type?: string;
+};
+
+/**
+ * TransaccionCreate
+ */
+export type TransaccionCreate = {
+    tipo: TipoTransaccion;
+    /**
+     * Cantidad
+     */
+    cantidad: number;
+    /**
+     * Es Ajuste
+     */
+    es_ajuste?: boolean;
+    /**
+     * Fecha Vencimiento
+     */
+    fecha_vencimiento?: string | null;
+    /**
+     * Nota
+     */
+    nota?: string | null;
+    /**
+     * Producto Id
+     */
+    producto_id: string;
+};
+
+/**
+ * TransaccionPublic
+ */
+export type TransaccionPublic = {
+    tipo: TipoTransaccion;
+    /**
+     * Cantidad
+     */
+    cantidad: number;
+    /**
+     * Es Ajuste
+     */
+    es_ajuste?: boolean;
+    /**
+     * Fecha Vencimiento
+     */
+    fecha_vencimiento?: string | null;
+    /**
+     * Nota
+     */
+    nota?: string | null;
+    /**
+     * Producto Id
+     */
+    producto_id: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Fecha
+     */
+    fecha: string;
+    /**
+     * Usuario Id
+     */
+    usuario_id: string;
+};
+
+/**
+ * TransaccionesPublic
+ */
+export type TransaccionesPublic = {
+    /**
+     * Data
+     */
+    data: Array<TransaccionPublic>;
+    /**
+     * Count
+     */
+    count: number;
 };
 
 /**
@@ -240,24 +465,6 @@ export type UserPublic = {
      * Created At
      */
     created_at?: string | null;
-};
-
-/**
- * UserRegister
- */
-export type UserRegister = {
-    /**
-     * Email
-     */
-    email: string;
-    /**
-     * Password
-     */
-    password: string;
-    /**
-     * Full Name
-     */
-    full_name?: string | null;
 };
 
 /**
@@ -527,22 +734,6 @@ export type usersCreateUserResponses = {
 
 export type usersCreateUserResponse = usersCreateUserResponses[keyof usersCreateUserResponses];
 
-export type usersDeleteUserMeData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/api/v1/users/me';
-};
-
-export type usersDeleteUserMeResponses = {
-    /**
-     * Successful Response
-     */
-    200: Message;
-};
-
-export type usersDeleteUserMeResponse = usersDeleteUserMeResponses[keyof usersDeleteUserMeResponses];
-
 export type usersReadUserMeData = {
     body?: never;
     path?: never;
@@ -608,31 +799,6 @@ export type usersUpdatePasswordMeResponses = {
 };
 
 export type usersUpdatePasswordMeResponse = usersUpdatePasswordMeResponses[keyof usersUpdatePasswordMeResponses];
-
-export type usersRegisterUserData = {
-    body: UserRegister;
-    path?: never;
-    query?: never;
-    url: '/api/v1/users/signup';
-};
-
-export type usersRegisterUserErrors = {
-    /**
-     * Validation Error
-     */
-    422: HTTPValidationError;
-};
-
-export type usersRegisterUserError = usersRegisterUserErrors[keyof usersRegisterUserErrors];
-
-export type usersRegisterUserResponses = {
-    /**
-     * Successful Response
-     */
-    200: UserPublic;
-};
-
-export type usersRegisterUserResponse = usersRegisterUserResponses[keyof usersRegisterUserResponses];
 
 export type usersDeleteUserData = {
     body?: never;
@@ -772,7 +938,7 @@ export type utilsHealthCheckResponses = {
 
 export type utilsHealthCheckResponse = utilsHealthCheckResponses[keyof utilsHealthCheckResponses];
 
-export type itemsReadItemsData = {
+export type categoriasReadCategoriasData = {
     body?: never;
     path?: never;
     query?: {
@@ -785,53 +951,53 @@ export type itemsReadItemsData = {
          */
         limit?: number;
     };
-    url: '/api/v1/items/';
+    url: '/api/v1/categorias/';
 };
 
-export type itemsReadItemsErrors = {
+export type categoriasReadCategoriasErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsReadItemsError = itemsReadItemsErrors[keyof itemsReadItemsErrors];
+export type categoriasReadCategoriasError = categoriasReadCategoriasErrors[keyof categoriasReadCategoriasErrors];
 
-export type itemsReadItemsResponses = {
+export type categoriasReadCategoriasResponses = {
     /**
      * Successful Response
      */
-    200: ItemsPublic;
+    200: CategoriasPublic;
 };
 
-export type itemsReadItemsResponse = itemsReadItemsResponses[keyof itemsReadItemsResponses];
+export type categoriasReadCategoriasResponse = categoriasReadCategoriasResponses[keyof categoriasReadCategoriasResponses];
 
-export type itemsCreateItemData = {
-    body: ItemCreate;
+export type categoriasCreateCategoriaData = {
+    body: CategoriaCreate;
     path?: never;
     query?: never;
-    url: '/api/v1/items/';
+    url: '/api/v1/categorias/';
 };
 
-export type itemsCreateItemErrors = {
+export type categoriasCreateCategoriaErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsCreateItemError = itemsCreateItemErrors[keyof itemsCreateItemErrors];
+export type categoriasCreateCategoriaError = categoriasCreateCategoriaErrors[keyof categoriasCreateCategoriaErrors];
 
-export type itemsCreateItemResponses = {
+export type categoriasCreateCategoriaResponses = {
     /**
      * Successful Response
      */
-    200: ItemPublic;
+    200: CategoriaPublic;
 };
 
-export type itemsCreateItemResponse = itemsCreateItemResponses[keyof itemsCreateItemResponses];
+export type categoriasCreateCategoriaResponse = categoriasCreateCategoriaResponses[keyof categoriasCreateCategoriaResponses];
 
-export type itemsDeleteItemData = {
+export type categoriasDeleteCategoriaData = {
     body?: never;
     path: {
         /**
@@ -840,28 +1006,117 @@ export type itemsDeleteItemData = {
         id: string;
     };
     query?: never;
-    url: '/api/v1/items/{id}';
+    url: '/api/v1/categorias/{id}';
 };
 
-export type itemsDeleteItemErrors = {
+export type categoriasDeleteCategoriaErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsDeleteItemError = itemsDeleteItemErrors[keyof itemsDeleteItemErrors];
+export type categoriasDeleteCategoriaError = categoriasDeleteCategoriaErrors[keyof categoriasDeleteCategoriaErrors];
 
-export type itemsDeleteItemResponses = {
+export type categoriasDeleteCategoriaResponses = {
     /**
      * Successful Response
      */
     200: Message;
 };
 
-export type itemsDeleteItemResponse = itemsDeleteItemResponses[keyof itemsDeleteItemResponses];
+export type categoriasDeleteCategoriaResponse = categoriasDeleteCategoriaResponses[keyof categoriasDeleteCategoriaResponses];
 
-export type itemsReadItemData = {
+export type categoriasUpdateCategoriaData = {
+    body: CategoriaUpdate;
+    path: {
+        /**
+         * Id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/categorias/{id}';
+};
+
+export type categoriasUpdateCategoriaErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type categoriasUpdateCategoriaError = categoriasUpdateCategoriaErrors[keyof categoriasUpdateCategoriaErrors];
+
+export type categoriasUpdateCategoriaResponses = {
+    /**
+     * Successful Response
+     */
+    200: CategoriaPublic;
+};
+
+export type categoriasUpdateCategoriaResponse = categoriasUpdateCategoriaResponses[keyof categoriasUpdateCategoriaResponses];
+
+export type productosReadProductosData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/productos/';
+};
+
+export type productosReadProductosErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type productosReadProductosError = productosReadProductosErrors[keyof productosReadProductosErrors];
+
+export type productosReadProductosResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProductosPublic;
+};
+
+export type productosReadProductosResponse = productosReadProductosResponses[keyof productosReadProductosResponses];
+
+export type productosCreateProductoData = {
+    body: ProductoCreate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/productos/';
+};
+
+export type productosCreateProductoErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type productosCreateProductoError = productosCreateProductoErrors[keyof productosCreateProductoErrors];
+
+export type productosCreateProductoResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProductoPublic;
+};
+
+export type productosCreateProductoResponse = productosCreateProductoResponses[keyof productosCreateProductoResponses];
+
+export type productosDeleteProductoData = {
     body?: never;
     path: {
         /**
@@ -870,29 +1125,29 @@ export type itemsReadItemData = {
         id: string;
     };
     query?: never;
-    url: '/api/v1/items/{id}';
+    url: '/api/v1/productos/{id}';
 };
 
-export type itemsReadItemErrors = {
+export type productosDeleteProductoErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsReadItemError = itemsReadItemErrors[keyof itemsReadItemErrors];
+export type productosDeleteProductoError = productosDeleteProductoErrors[keyof productosDeleteProductoErrors];
 
-export type itemsReadItemResponses = {
+export type productosDeleteProductoResponses = {
     /**
      * Successful Response
      */
-    200: ItemPublic;
+    200: Message;
 };
 
-export type itemsReadItemResponse = itemsReadItemResponses[keyof itemsReadItemResponses];
+export type productosDeleteProductoResponse = productosDeleteProductoResponses[keyof productosDeleteProductoResponses];
 
-export type itemsUpdateItemData = {
-    body: ItemUpdate;
+export type productosReadProductoData = {
+    body?: never;
     path: {
         /**
          * Id
@@ -900,26 +1155,157 @@ export type itemsUpdateItemData = {
         id: string;
     };
     query?: never;
-    url: '/api/v1/items/{id}';
+    url: '/api/v1/productos/{id}';
 };
 
-export type itemsUpdateItemErrors = {
+export type productosReadProductoErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsUpdateItemError = itemsUpdateItemErrors[keyof itemsUpdateItemErrors];
+export type productosReadProductoError = productosReadProductoErrors[keyof productosReadProductoErrors];
 
-export type itemsUpdateItemResponses = {
+export type productosReadProductoResponses = {
     /**
      * Successful Response
      */
-    200: ItemPublic;
+    200: ProductoPublic;
 };
 
-export type itemsUpdateItemResponse = itemsUpdateItemResponses[keyof itemsUpdateItemResponses];
+export type productosReadProductoResponse = productosReadProductoResponses[keyof productosReadProductoResponses];
+
+export type productosUpdateProductoData = {
+    body: ProductoUpdate;
+    path: {
+        /**
+         * Id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/productos/{id}';
+};
+
+export type productosUpdateProductoErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type productosUpdateProductoError = productosUpdateProductoErrors[keyof productosUpdateProductoErrors];
+
+export type productosUpdateProductoResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProductoPublic;
+};
+
+export type productosUpdateProductoResponse = productosUpdateProductoResponses[keyof productosUpdateProductoResponses];
+
+export type transaccionesReadTransaccionesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Producto Id
+         */
+        producto_id?: string | null;
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/transacciones/';
+};
+
+export type transaccionesReadTransaccionesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type transaccionesReadTransaccionesError = transaccionesReadTransaccionesErrors[keyof transaccionesReadTransaccionesErrors];
+
+export type transaccionesReadTransaccionesResponses = {
+    /**
+     * Successful Response
+     */
+    200: TransaccionesPublic;
+};
+
+export type transaccionesReadTransaccionesResponse = transaccionesReadTransaccionesResponses[keyof transaccionesReadTransaccionesResponses];
+
+export type transaccionesCreateTransaccionData = {
+    body: TransaccionCreate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/transacciones/';
+};
+
+export type transaccionesCreateTransaccionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type transaccionesCreateTransaccionError = transaccionesCreateTransaccionErrors[keyof transaccionesCreateTransaccionErrors];
+
+export type transaccionesCreateTransaccionResponses = {
+    /**
+     * Successful Response
+     */
+    200: TransaccionPublic;
+};
+
+export type transaccionesCreateTransaccionResponse = transaccionesCreateTransaccionResponses[keyof transaccionesCreateTransaccionResponses];
+
+export type alertasReadAlertasData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Estado
+         */
+        estado?: EstadoAlerta | null;
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/alertas/';
+};
+
+export type alertasReadAlertasErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type alertasReadAlertasError = alertasReadAlertasErrors[keyof alertasReadAlertasErrors];
+
+export type alertasReadAlertasResponses = {
+    /**
+     * Successful Response
+     */
+    200: AlertasPublic;
+};
+
+export type alertasReadAlertasResponse = alertasReadAlertasResponses[keyof alertasReadAlertasResponses];
 
 export type privateCreateUserData = {
     body: PrivateUserCreate;
