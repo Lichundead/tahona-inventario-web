@@ -361,6 +361,23 @@ Comandos de verificación:
 
 **Tamaño:** S
 
+### Tarea 14: Traducir al español los textos de la plantilla
+
+**Responsable:** A (hecha)
+
+**Descripción:** Login, recuperar y restablecer contraseña, ajustes, usuarios, tabla paginada, menús, avisos y páginas de error estaban en inglés. Se tradujeron con tuteo neutro, como pide el kit, y `index.html` pasa a `lang="es"`. El aviso de eliminar usuario ahora dice lo que ocurre de verdad: no se puede eliminar un usuario con movimientos. El pie de página ya no enlaza a las redes de FastAPI.
+
+**Criterios de aceptación:**
+- [x] No queda texto visible en inglés en el frontend, salvo los mensajes de error que envía el backend
+- [x] Los tests E2E buscan los textos en español
+
+**Verificación:**
+- [x] `bun run build` y `bun run lint` pasan; `bun run test`: 42 de 44 (los 2 fallos son los de paginación que arregla la Tarea 2)
+
+**Dependencias:** Ninguna. Al fusionar con la Tarea 2, `findRow` en `tests/utils/inventario.ts` debe buscar «Ir a la página siguiente» en lugar de «Go to next page».
+
+**Tamaño:** M
+
 ### Checkpoint: Completo
 - [ ] Todas las pruebas en verde y `bun run build` limpio
 - [ ] Los criterios de aceptación de la propuesta están cubiertos

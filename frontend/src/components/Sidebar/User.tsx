@@ -29,7 +29,7 @@ function UserInfo({ fullName, email }: UserInfoProps) {
     <div className="flex items-center gap-2.5 w-full min-w-0">
       <Avatar className="size-8">
         <AvatarFallback className="bg-secondary text-secondary-foreground">
-          {getInitials(fullName || "User")}
+          {getInitials(fullName || "Usuario")}
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col items-start min-w-0">
@@ -82,12 +82,12 @@ export function User({ user }: { user: any }) {
             <RouterLink to="/settings" onClick={handleMenuClick}>
               <DropdownMenuItem>
                 <Settings />
-                User Settings
+                Ajustes de usuario
               </DropdownMenuItem>
             </RouterLink>
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
-              Log Out
+              Cerrar sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

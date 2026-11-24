@@ -20,11 +20,9 @@ function Dashboard() {
     <div>
       <div>
         <h1 className="text-2xl truncate max-w-sm">
-          Hi, {currentUser?.full_name || currentUser?.email} 👋
+          Hola, {currentUser?.full_name || currentUser?.email}
         </h1>
-        <p className="text-muted-foreground">
-          Welcome back, nice to see you again!!!
-        </p>
+        <p className="text-muted-foreground">Qué bueno verte de nuevo.</p>
       </div>
     </div>
   )
