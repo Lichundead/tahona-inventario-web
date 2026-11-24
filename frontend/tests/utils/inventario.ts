@@ -60,7 +60,7 @@ export async function createProducto(
 // DataTable shows 10 rows per page and test data accumulates, so page until the row shows up
 export async function findRow(page: Page, text: string) {
   const row = page.getByRole("row").filter({ hasText: text })
-  const next = page.getByRole("button", { name: "Go to next page" })
+  const next = page.getByRole("button", { name: "Ir a la página siguiente" })
   await page.getByRole("row").nth(1).waitFor()
   while ((await row.count()) === 0 && (await next.isVisible())) {
     if (!(await next.isEnabled())) break
