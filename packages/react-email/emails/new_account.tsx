@@ -20,31 +20,29 @@ export default function NewAccount({
 }: NewAccountProps) {
   return (
     <Layout
-      title={`${project_name} - New account`}
-      preview={`Your ${project_name} account is ready`}
+      title={`${project_name} - Nueva cuenta`}
+      preview={`Tu cuenta de ${project_name} está lista`}
       project_name={project_name}
     >
-      <Heading>Welcome to {project_name}!</Heading>
-      <Text style={bodyTextStyle}>Hi,</Text>
+      <Heading>¡Bienvenido a {project_name}!</Heading>
+      <Text style={bodyTextStyle}>Hola:</Text>
       <Text style={bodyTextStyle}>
-        Your account has been successfully created and is ready to use. These
-        are your credentials:
+        Tu cuenta se creó y ya puedes usarla. Estos son tus datos de acceso:
       </Text>
       <Callout>
-        <Detail label="Username" value={username} />
-        <Detail label="Password" value={password} />
+        <Detail label="Usuario" value={username} />
+        <Detail label="Contraseña" value={password} />
       </Callout>
-      <Text style={bodyTextStyle}>
-        Get started by signing in to your dashboard:
-      </Text>
-      <LinkButton href={link}>Go to Dashboard</LinkButton>
+      <Text style={bodyTextStyle}>Para empezar, inicia sesión:</Text>
+      <LinkButton href={link}>Ir a Tahona Inventario</LinkButton>
       <Text style={supportingTextStyle}>
-        Or copy and paste this link into your browser:
+        O copia y pega este enlace en tu navegador:
         <br />
         <Link href={link}>{link}</Link>
       </Text>
       <Text style={supportingTextStyle}>
-        For security reasons, change your password after your first sign in.
+        Por seguridad, cambia tu contraseña después de iniciar sesión por
+        primera vez.
       </Text>
     </Layout>
   )

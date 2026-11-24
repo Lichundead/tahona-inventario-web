@@ -60,7 +60,7 @@ def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
     if user:
         raise HTTPException(
             status_code=400,
-            detail="The user with this email already exists in the system.",
+            detail="Ya existe un usuario con este correo",
         )
 
     user = crud.create_user(session=session, user_create=user_in)
@@ -88,7 +88,7 @@ def update_user_me(
         existing_user = crud.get_user_by_email(session=session, email=user_in.email)
         if existing_user and existing_user.id != current_user.id:
             raise HTTPException(
-                status_code=409, detail="User with this email already exists"
+                status_code=409, detail="Ya existe un usuario con este correo"
             )
     user_data = user_in.model_dump(exclude_unset=True)
     current_user.sqlmodel_update(user_data)
@@ -107,16 +107,16 @@ def update_password_me(
     """
     verified, _ = verify_password(body.current_password, current_user.hashed_password)
     if not verified:
-        raise HTTPException(status_code=400, detail="Incorrect password")
+        raise HTTPException(status_code=400, detail="Contraseña incorrecta")
     if body.current_password == body.new_password:
         raise HTTPException(
-            status_code=400, detail="New password cannot be the same as the current one"
+            status_code=400, detail="La nueva contraseña no puede ser igual a la actual"
         )
     hashed_password = get_password_hash(body.new_password)
     current_user.hashed_password = hashed_password
     session.add(current_user)
     session.commit()
-    return Message(message="Password updated successfully")
+    return Message(message="Contraseña actualizada")
 
 
 @router.get("/me", response_model=UserPublic)
@@ -140,10 +140,10 @@ def read_user_by_id(
     if not current_user.is_superuser:
         raise HTTPException(
             status_code=403,
-            detail="The user doesn't have enough privileges",
+            detail="No tienes permisos suficientes",
         )
     if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return user
 
 
@@ -166,13 +166,13 @@ def update_user(
     if not db_user:
         raise HTTPException(
             status_code=404,
-            detail="The user with this id does not exist in the system",
+            detail="No existe un usuario con este id",
         )
     if user_in.email:
         existing_user = crud.get_user_by_email(session=session, email=user_in.email)
         if existing_user and existing_user.id != user_id:
             raise HTTPException(
-                status_code=409, detail="User with this email already exists"
+                status_code=409, detail="Ya existe un usuario con este correo"
             )
 
     db_user = crud.update_user(session=session, db_user=db_user, user_in=user_in)
@@ -188,12 +188,12 @@ def delete_user(
     """
     user = session.get(User, user_id)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
     if user == current_user:
         raise HTTPException(
-            status_code=403, detail="Super users are not allowed to delete themselves"
+            status_code=403, detail="Un superusuario no puede eliminarse a sí mismo"
         )
     # RN-15: users with movements can't be deleted (FK RESTRICT -> 409); deactivate them
     session.delete(user)
     session.commit()
-    return Message(message="User deleted successfully")
+    return Message(message="Usuario eliminado")

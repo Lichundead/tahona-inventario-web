@@ -24,7 +24,7 @@ export const Layout = ({
   children,
 }: LayoutProps) => {
   return (
-    <Html lang="en" dir="ltr">
+    <Html lang="es" dir="ltr">
       <Head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -42,8 +42,8 @@ export const Layout = ({
               <Hr style={footerRuleStyle} />
               <Section>
                 <Text style={footerStyle}>
-                  © {new Date().getFullYear()} {project_name}. All rights
-                  reserved.
+                  © {new Date().getFullYear()} {project_name}. Todos los
+                  derechos reservados.
                 </Text>
               </Section>
             </Column>
