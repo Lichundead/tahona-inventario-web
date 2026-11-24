@@ -39,19 +39,19 @@ Comandos de verificación:
 
 ### Tarea 2: Crear, editar y borrar productos (superusuario)
 
-**Responsable:** A
+**Responsable:** A (hecha)
 
 **Descripción:** Diálogos para crear y editar un producto (nombre, unidad, stock mínimo, categoría, `alerta_caducidad`) y para borrarlo, siguiendo el patrón de `Admin/AddUser`, `EditUser` y `DeleteUser`. Solo los ve un superusuario. Si el producto tiene movimientos, el borrado devuelve 409 (RN-07) y ese error se muestra como mensaje legible.
 
 **Criterios de aceptación:**
-- [ ] Un superusuario crea, edita y borra productos; la tabla se actualiza sin recargar
-- [ ] Un usuario normal no ve los botones de crear, editar ni borrar
-- [ ] Borrar un producto con movimientos muestra el motivo, sin error genérico
+- [x] Un superusuario crea, edita y borra productos; la tabla se actualiza sin recargar
+- [x] Un usuario normal no ve los botones de crear, editar ni borrar
+- [x] Borrar un producto con movimientos muestra el motivo, sin error genérico
 
 **Verificación:**
-- [ ] `bun run build` y `bun run lint` pasan
-- [ ] `productos.spec.ts`: flujo de crear, editar y borrar, más el caso del 409
-- [ ] Manual: entrar con un usuario normal y comprobar que no ve las acciones
+- [x] `bun run build` y `bun run lint` pasan
+- [x] `productos.spec.ts`: flujo de crear, editar y borrar, más el caso del 409
+- [x] Manual: entrar con un usuario normal y comprobar que no ve las acciones (lo cubre la prueba E2E)
 
 **Dependencias:** Tarea 1
 

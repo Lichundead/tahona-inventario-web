@@ -1,4 +1,4 @@
-import type { APIRequestContext } from "@playwright/test"
+import type { APIRequestContext, Page } from "@playwright/test"
 import { firstSuperuser, firstSuperuserPassword } from "../config.ts"
 
 const api = `${process.env.VITE_API_URL}/api/v1`
@@ -55,4 +55,16 @@ export async function createProducto(
     )
   }
   return { producto, categoria }
+}
+
+// DataTable shows 10 rows per page and test data accumulates, so page until the row shows up
+export async function findRow(page: Page, text: string) {
+  const row = page.getByRole("row").filter({ hasText: text })
+  const next = page.getByRole("button", { name: "Go to next page" })
+  await page.getByRole("row").nth(1).waitFor()
+  while ((await row.count()) === 0 && (await next.isVisible())) {
+    if (!(await next.isEnabled())) break
+    await next.click()
+  }
+  return row
 }

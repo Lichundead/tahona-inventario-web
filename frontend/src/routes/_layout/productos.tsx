@@ -1,11 +1,17 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
+import { Plus } from "lucide-react"
 import { Suspense } from "react"
 
-import { CategoriasService, ProductosService } from "@/client"
+import { ProductosService } from "@/client"
 import { DataTable } from "@/components/Common/DataTable"
 import { columns, type ProductoTableData } from "@/components/Productos/columns"
+import ProductoForm, {
+  categoriasQueryOptions,
+} from "@/components/Productos/ProductoForm"
+import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
+import useAuth from "@/hooks/useAuth"
 
 // shortcut: loads the whole catalog in one request, paginate server-side if it grows past ~1000
 const LIMIT = 1000
@@ -27,12 +33,7 @@ function ProductosTableContent() {
     queryFn: async () =>
       (await ProductosService.readProductos({ query: { limit: LIMIT } })).data,
   })
-  const { data: categorias } = useSuspenseQuery({
-    queryKey: ["categorias"],
-    queryFn: async () =>
-      (await CategoriasService.readCategorias({ query: { limit: LIMIT } }))
-        .data,
-  })
+  const { data: categorias } = useSuspenseQuery(categoriasQueryOptions)
 
   if (productos.data.length === 0) {
     return (
@@ -52,13 +53,27 @@ function ProductosTableContent() {
 }
 
 function Productos() {
+  const { user } = useAuth()
+
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Productos</h1>
-        <p className="text-muted-foreground">
-          Catálogo con el stock actual de cada producto
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Productos</h1>
+          <p className="text-muted-foreground">
+            Catálogo con el stock actual de cada producto
+          </p>
+        </div>
+        {user?.is_superuser && (
+          <ProductoForm
+            trigger={
+              <Button>
+                <Plus className="mr-2" />
+                Añadir producto
+              </Button>
+            }
+          />
+        )}
       </div>
       <Suspense
         fallback={

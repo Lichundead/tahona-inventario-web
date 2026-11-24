@@ -3,6 +3,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import type { ProductoPublic } from "@/client"
 import type { DataTableFeatures } from "@/components/Common/DataTable"
 import { Badge } from "@/components/ui/badge"
+import { ProductoActionsMenu } from "./ProductoActionsMenu"
 
 export type ProductoTableData = ProductoPublic & {
   categoria: string
@@ -54,5 +55,14 @@ export const columns: ColumnDef<DataTableFeatures, ProductoTableData>[] = [
       ) : (
         <Badge variant="secondary">OK</Badge>
       ),
+  },
+  {
+    id: "actions",
+    header: () => <span className="sr-only">Acciones</span>,
+    cell: ({ row }) => (
+      <div className="flex justify-end">
+        <ProductoActionsMenu producto={row.original} />
+      </div>
+    ),
   },
 ]
