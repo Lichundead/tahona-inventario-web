@@ -26,7 +26,7 @@ Detalle y criterios de aceptación en `tasks/todo.md`.
 ### Fase 1: Catálogo
 - [x] Tarea 1: Lista de productos con stock
 - [x] Tarea 2: Crear, editar y borrar productos (superusuario)
-- [ ] Tarea 3: Gestionar categorías (superusuario)
+- [x] Tarea 3: Gestionar categorías (superusuario)
 
 ### Checkpoint: Catálogo
 

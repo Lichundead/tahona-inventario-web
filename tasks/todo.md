@@ -66,18 +66,18 @@ Comandos de verificación:
 
 ### Tarea 3: Gestionar categorías (superusuario)
 
-**Responsable:** A
+**Responsable:** A (hecha)
 
 **Descripción:** Crear, renombrar y borrar categorías desde un diálogo en `/productos`, para no añadir otra página. Borrar una categoría que tiene productos devuelve 409 y se muestra el motivo.
 
 **Criterios de aceptación:**
-- [ ] Un superusuario crea, renombra y borra categorías
-- [ ] Una categoría nueva aparece de inmediato en el selector del formulario de producto
-- [ ] Borrar una categoría en uso muestra el motivo
+- [x] Un superusuario crea, renombra y borra categorías
+- [x] Una categoría nueva aparece de inmediato en el selector del formulario de producto
+- [x] Borrar una categoría en uso muestra el motivo
 
 **Verificación:**
-- [ ] `bun run build` y `bun run lint` pasan
-- [ ] `productos.spec.ts`: crear una categoría y usarla en un producto nuevo
+- [x] `bun run build` y `bun run lint` pasan
+- [x] `productos.spec.ts`: crear una categoría y usarla en un producto nuevo
 
 **Dependencias:** Tarea 2
 

@@ -5,6 +5,7 @@ import { Suspense } from "react"
 
 import { ProductosService } from "@/client"
 import { DataTable } from "@/components/Common/DataTable"
+import Categorias from "@/components/Productos/Categorias"
 import { columns, type ProductoTableData } from "@/components/Productos/columns"
 import ProductoForm, {
   categoriasQueryOptions,
@@ -65,14 +66,17 @@ function Productos() {
           </p>
         </div>
         {user?.is_superuser && (
-          <ProductoForm
-            trigger={
-              <Button>
-                <Plus className="mr-2" />
-                Añadir producto
-              </Button>
-            }
-          />
+          <div className="flex gap-2">
+            <Categorias />
+            <ProductoForm
+              trigger={
+                <Button>
+                  <Plus className="mr-2" />
+                  Añadir producto
+                </Button>
+              }
+            />
+          </div>
         )}
       </div>
       <Suspense
