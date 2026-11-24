@@ -51,6 +51,8 @@ export function DataTable<TData extends RowData>({
     features: dataTableFeatures,
     data,
     columns,
+    // Keep the current page when rows are edited, deleted or refetched
+    autoResetPageIndex: false,
   })
 
   return (

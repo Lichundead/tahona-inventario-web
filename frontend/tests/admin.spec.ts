@@ -95,7 +95,8 @@ test.describe("Admin user management", () => {
     await page.getByRole("button", { name: "Guardar" }).click()
 
     await expect(page.getByText("Usuario actualizado")).toBeVisible()
-    await expect(page.getByText(updatedName)).toBeVisible()
+    // Earlier runs leave other users with the same name, so look only at this user's row
+    await expect(userRow.getByText(updatedName)).toBeVisible()
   })
 
   test("Delete a user successfully", async ({ page }) => {
