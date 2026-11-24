@@ -342,6 +342,25 @@ Comandos de verificación:
 
 **Tamaño:** S
 
+### Tarea 13: Aplicar el sistema de diseño Tahona
+
+**Responsable:** A (hecha)
+
+**Descripción:** Aplicar el kit de diseño (`tokens.css` y la guía de marca): colores de marca en `:root` y `.dark` de `index.css`, tokens nuevos `--brand` y `--destructive-foreground`, el logo `tahona-logo.webp` en lugar del de FastAPI, y el foco de teclado y los botones e insignias rojos con el contraste que pide el kit.
+
+**Criterios de aceptación:**
+- [x] Los tokens de `index.css` tienen los valores del kit en los dos temas
+- [x] Botones e insignias `destructive` usan `destructive-foreground`, no blanco, y el anillo de foco usa `ring` sin opacidad
+- [x] La barra lateral y el login muestran el logo de Tahona (32px o más); con la barra contraída se lee «Tahona» en texto
+
+**Verificación:**
+- [x] `bun run build` y `bun run lint` pasan
+- [x] Manual: capturas del login y de `/productos` en claro y oscuro, foco de teclado y barra contraída
+
+**Dependencias:** Ninguna
+
+**Tamaño:** S
+
 ### Checkpoint: Completo
 - [ ] Todas las pruebas en verde y `bun run build` limpio
 - [ ] Los criterios de aceptación de la propuesta están cubiertos
