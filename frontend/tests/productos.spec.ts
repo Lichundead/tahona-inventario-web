@@ -104,6 +104,86 @@ test.describe("Gestión de productos (superusuario)", () => {
   })
 })
 
+test.describe("Categorías (superusuario)", () => {
+  const random = () => Math.random().toString(36).substring(7)
+
+  test("Crea una categoría y la usa en un producto nuevo", async ({ page }) => {
+    const categoria = `Cat ${random()}`
+    const producto = `Prod ${random()}`
+
+    await page.goto("/productos")
+    await page.getByRole("button", { name: "Categorías" }).click()
+    await page.getByLabel("Nueva categoría").fill(categoria)
+    await page.getByRole("button", { name: "Añadir", exact: true }).click()
+    await expect(page.getByText("Categoría creada")).toBeVisible()
+    await page.keyboard.press("Escape")
+
+    await page.getByRole("button", { name: "Añadir producto" }).click()
+    await page.getByLabel("Nombre").fill(producto)
+    await page.getByRole("combobox").click()
+    await page.getByRole("option", { name: categoria }).click()
+    await page.getByRole("button", { name: "Guardar" }).click()
+
+    await expect(page.getByText("Producto creado")).toBeVisible()
+    await expect(await findRow(page, producto)).toContainText(categoria)
+  })
+
+  test("Renombra una categoría", async ({ page, request }) => {
+    const { categoria } = await createProducto(request)
+    const nuevo = `Renombrada ${random()}`
+
+    await page.goto("/productos")
+    await page.getByRole("button", { name: "Categorías" }).click()
+    await page
+      .getByRole("button", { name: `Renombrar ${categoria.nombre}` })
+      .click()
+    await page.getByLabel(`Nuevo nombre de ${categoria.nombre}`).fill(nuevo)
+    await page.getByRole("button", { name: "Guardar" }).click()
+
+    await expect(page.getByText("Categoría renombrada")).toBeVisible()
+    await expect(
+      page.getByRole("button", { name: `Renombrar ${nuevo}` }),
+    ).toBeVisible()
+  })
+
+  test("Elimina una categoría sin productos", async ({ page }) => {
+    const categoria = `Cat ${random()}`
+
+    await page.goto("/productos")
+    await page.getByRole("button", { name: "Categorías" }).click()
+    await page.getByLabel("Nueva categoría").fill(categoria)
+    await page.getByRole("button", { name: "Añadir", exact: true }).click()
+    await page.getByRole("button", { name: `Eliminar ${categoria}` }).click()
+    await page.getByRole("button", { name: "Eliminar", exact: true }).click()
+
+    await expect(page.getByText("Categoría eliminada")).toBeVisible()
+    await expect(
+      page.getByRole("button", { name: `Eliminar ${categoria}` }),
+    ).toHaveCount(0)
+  })
+
+  test("No elimina una categoría con productos (RN-08)", async ({
+    page,
+    request,
+  }) => {
+    const { categoria } = await createProducto(request)
+
+    await page.goto("/productos")
+    await page.getByRole("button", { name: "Categorías" }).click()
+    await page
+      .getByRole("button", { name: `Eliminar ${categoria.nombre}` })
+      .click()
+    await page.getByRole("button", { name: "Eliminar", exact: true }).click()
+
+    await expect(
+      page.getByText("No se puede eliminar: la categoría tiene productos"),
+    ).toBeVisible()
+    await expect(
+      page.getByRole("button", { name: `Eliminar ${categoria.nombre}` }),
+    ).toBeVisible()
+  })
+})
+
 test.describe("Usuario sin permisos de administración", () => {
   test.use({ storageState: { cookies: [], origins: [] } })
 
@@ -123,5 +203,8 @@ test.describe("Usuario sin permisos de administración", () => {
     await expect(
       page.getByRole("button", { name: /^Acciones de / }),
     ).toHaveCount(0)
+    await expect(page.getByRole("button", { name: "Categorías" })).toHaveCount(
+      0,
+    )
   })
 })
