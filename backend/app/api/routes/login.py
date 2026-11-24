@@ -31,9 +31,9 @@ def login_access_token(
         session=session, email=form_data.username, password=form_data.password
     )
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect email or password")
+        raise HTTPException(status_code=400, detail="Correo o contraseña incorrectos")
     elif not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(status_code=400, detail="Usuario inactivo")
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return Token(
         access_token=security.create_access_token(
@@ -70,7 +70,7 @@ def recover_password(email: str, session: SessionDep) -> Message:
             html_content=email_data.html_content,
         )
     return Message(
-        message="If that email is registered, we sent a password recovery link"
+        message="Si ese correo está registrado, enviamos un enlace para recuperar la contraseña"
     )
 
 
@@ -81,20 +81,24 @@ def reset_password(session: SessionDep, body: NewPassword) -> Message:
     """
     email = verify_password_reset_token(token=body.token)
     if not email:
-        raise HTTPException(status_code=400, detail="Invalid token")
+        raise HTTPException(
+            status_code=400, detail="El enlace no es válido o ya venció"
+        )
     user = crud.get_user_by_email(session=session, email=email)
     if not user:
         # Don't reveal that the user doesn't exist - use same error as invalid token
-        raise HTTPException(status_code=400, detail="Invalid token")
+        raise HTTPException(
+            status_code=400, detail="El enlace no es válido o ya venció"
+        )
     elif not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(status_code=400, detail="Usuario inactivo")
     user_in_update = UserUpdate(password=body.new_password)
     crud.update_user(
         session=session,
         db_user=user,
         user_in=user_in_update,
     )
-    return Message(message="Password updated successfully")
+    return Message(message="Contraseña actualizada")
 
 
 @router.post(
@@ -111,7 +115,7 @@ def recover_password_html_content(email: str, session: SessionDep) -> Any:
     if not user:
         raise HTTPException(
             status_code=404,
-            detail="The user with this username does not exist in the system.",
+            detail="No existe un usuario con este correo",
         )
     password_reset_token = generate_password_reset_token(email=email)
     email_data = generate_reset_password_email(
