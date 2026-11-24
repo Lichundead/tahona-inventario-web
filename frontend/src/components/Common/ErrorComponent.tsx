@@ -12,15 +12,15 @@ const ErrorComponent = () => {
           <span className="text-6xl md:text-8xl font-bold leading-none mb-4">
             Error
           </span>
-          <span className="text-2xl font-bold mb-2">Oops!</span>
+          <span className="text-2xl font-bold mb-2">Algo salió mal</span>
         </div>
       </div>
 
       <p className="text-lg text-muted-foreground mb-4 text-center z-10">
-        Something went wrong. Please try again.
+        Recarga la página o vuelve al inicio.
       </p>
       <Link to="/">
-        <Button>Go Home</Button>
+        <Button>Ir al inicio</Button>
       </Link>
     </div>
   )

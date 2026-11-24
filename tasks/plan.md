@@ -49,6 +49,10 @@ Detalle y criterios de aceptación en `tasks/todo.md`.
 - [ ] Tarea 11: Exportar el resumen a Excel (.xlsx)
 - [ ] Tarea 12: Exportar el resumen a PDF
 
+### Tema
+- [x] Tarea 13: Aplicar el sistema de diseño Tahona
+- [x] Tarea 14: Traducir al español los textos de la plantilla
+
 ### Checkpoint: Completo
 
 ## Reparto del equipo

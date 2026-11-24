@@ -6,8 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import useAuth from "@/hooks/useAuth"
 
 const tabsConfig = [
-  { value: "my-profile", title: "My profile", component: UserInformation },
-  { value: "password", title: "Password", component: ChangePassword },
+  { value: "my-profile", title: "Mi perfil", component: UserInformation },
+  { value: "password", title: "Contraseña", component: ChangePassword },
 ]
 
 export const Route = createFileRoute("/_layout/settings")({
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_layout/settings")({
   head: () => ({
     meta: [
       {
-        title: "Settings - Tahona Inventario",
+        title: "Ajustes - Tahona Inventario",
       },
     ],
   }),
@@ -31,9 +31,11 @@ function UserSettings() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">User Settings</h1>
+        <h1 className="text-2xl font-bold tracking-tight">
+          Ajustes de usuario
+        </h1>
         <p className="text-muted-foreground">
-          Manage your account settings and preferences
+          Gestiona tu cuenta y tus preferencias
         </p>
       </div>
 

@@ -342,6 +342,42 @@ Comandos de verificación:
 
 **Tamaño:** S
 
+### Tarea 13: Aplicar el sistema de diseño Tahona
+
+**Responsable:** A (hecha)
+
+**Descripción:** Aplicar el kit de diseño (`tokens.css` y la guía de marca): colores de marca en `:root` y `.dark` de `index.css`, tokens nuevos `--brand` y `--destructive-foreground`, el logo `tahona-logo.webp` en lugar del de FastAPI, y el foco de teclado y los botones e insignias rojos con el contraste que pide el kit.
+
+**Criterios de aceptación:**
+- [x] Los tokens de `index.css` tienen los valores del kit en los dos temas
+- [x] Botones e insignias `destructive` usan `destructive-foreground`, no blanco, y el anillo de foco usa `ring` sin opacidad
+- [x] La barra lateral y el login muestran el logo de Tahona (32px o más); con la barra contraída se lee «Tahona» en texto
+
+**Verificación:**
+- [x] `bun run build` y `bun run lint` pasan
+- [x] Manual: capturas del login y de `/productos` en claro y oscuro, foco de teclado y barra contraída
+
+**Dependencias:** Ninguna
+
+**Tamaño:** S
+
+### Tarea 14: Traducir al español los textos de la plantilla
+
+**Responsable:** A (hecha)
+
+**Descripción:** Login, recuperar y restablecer contraseña, ajustes, usuarios, tabla paginada, menús, avisos y páginas de error estaban en inglés. Se tradujeron con tuteo neutro, como pide el kit, y `index.html` pasa a `lang="es"`. El aviso de eliminar usuario ahora dice lo que ocurre de verdad: no se puede eliminar un usuario con movimientos. El pie de página ya no enlaza a las redes de FastAPI.
+
+**Criterios de aceptación:**
+- [x] No queda texto visible en inglés en el frontend, salvo los mensajes de error que envía el backend
+- [x] Los tests E2E buscan los textos en español
+
+**Verificación:**
+- [x] `bun run build` y `bun run lint` pasan; `bun run test`: 42 de 44 (los 2 fallos son los de paginación que arregla la Tarea 2)
+
+**Dependencias:** Ninguna. Al fusionar con la Tarea 2, `findRow` en `tests/utils/inventario.ts` debe buscar «Ir a la página siguiente» en lugar de «Go to next page».
+
+**Tamaño:** M
+
 ### Checkpoint: Completo
 - [ ] Todas las pruebas en verde y `bun run build` limpio
 - [ ] Los criterios de aceptación de la propuesta están cubiertos
