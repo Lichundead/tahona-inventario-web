@@ -1,8 +1,10 @@
 import uuid
+from datetime import timedelta
 from typing import Any
 
 from sqlmodel import Session, case, col, func, select
 
+from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
 from app.models import (
     Alerta,
@@ -128,6 +130,60 @@ def sincronizar_alerta_stock(*, session: Session, producto: Producto) -> None:
         session.add(activa)
 
 
+def sincronizar_alertas_caducidad(
+    *, session: Session, producto_id: uuid.UUID | None = None
+) -> None:
+    """RF-023: one alert per batch expiring within DIAS_AVISO_CADUCIDAD while the
+    producto has stock; closed when the stock hits 0, never when the date passes.
+    Doesn't commit. Without producto_id it checks every producto."""
+    stock = stock_por_producto()
+    limite = get_datetime_utc().date() + timedelta(days=settings.DIAS_AVISO_CADUCIDAD)
+    # Any estado counts, so a closed alert doesn't come back
+    avisados = select(Alerta.transaccion_id).where(
+        col(Alerta.transaccion_id).is_not(None)
+    )
+    lotes = (
+        select(Transaccion, Producto)
+        .join(Producto)
+        .join(stock, stock.c.producto_id == Producto.id)
+        .where(
+            Transaccion.tipo == TipoTransaccion.entrada,
+            col(Transaccion.fecha_vencimiento) <= limite,
+            col(Producto.alerta_caducidad),
+            stock.c.stock > 0,
+            col(Transaccion.id).not_in(avisados),
+        )
+    )
+    agotadas = (
+        select(Alerta)
+        .join(stock, stock.c.producto_id == Alerta.producto_id)
+        .where(
+            Alerta.tipo == TipoAlerta.caducidad,
+            Alerta.estado == EstadoAlerta.activa,
+            stock.c.stock <= 0,
+        )
+    )
+    if producto_id:
+        lotes = lotes.where(Transaccion.producto_id == producto_id)
+        agotadas = agotadas.where(Alerta.producto_id == producto_id)
+    # shortcut: two concurrent GET /alertas can both insert the same batch's alert;
+    # a unique index on alerta.transaccion_id fixes it but needs a migration
+    for lote, producto in session.exec(lotes).all():
+        session.add(
+            Alerta(
+                tipo=TipoAlerta.caducidad,
+                producto_id=producto.id,
+                transaccion_id=lote.id,
+                mensaje=f"{producto.nombre}: un lote de {lote.cantidad} "
+                f"{producto.unidad} vence el {lote.fecha_vencimiento}",
+            )
+        )
+    for alerta in session.exec(agotadas).all():
+        alerta.estado = EstadoAlerta.cerrada
+        alerta.fecha_cierre = get_datetime_utc()
+        session.add(alerta)
+
+
 def registrar_transaccion(
     *,
     session: Session,
@@ -148,6 +204,7 @@ def registrar_transaccion(
     session.add(transaccion)
     session.flush()
     sincronizar_alerta_stock(session=session, producto=producto)
+    sincronizar_alertas_caducidad(session=session, producto_id=producto.id)
     session.commit()
     session.refresh(transaccion)
     return transaccion

@@ -3,6 +3,7 @@ from typing import Any
 from fastapi import APIRouter, Depends
 from sqlmodel import col, func, select
 
+from app import crud
 from app.api.deps import SessionDep, get_current_user
 from app.models import Alerta, AlertaPublic, AlertasPublic, EstadoAlerta
 
@@ -23,6 +24,8 @@ def read_alertas(
     """
     Retrieve alertas, active ones by default. Pass no estado to get all.
     """
+    crud.sincronizar_alertas_caducidad(session=session)
+    session.commit()
     count_statement = select(func.count()).select_from(Alerta)
     statement = select(Alerta)
     if estado:

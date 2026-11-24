@@ -1,10 +1,10 @@
 import {
-  ArrowDownToLine,
-  ArrowUpFromLine,
-  FileText,
-  Home,
-  Package,
+  CakeSlice,
+  ChefHat,
+  ClipboardList,
+  Croissant,
   Users,
+  Wheat,
 } from "lucide-react"
 
 import { SidebarAppearance } from "@/components/Common/Appearance"
@@ -20,11 +20,11 @@ import { type Item, Main } from "./Main"
 import { User } from "./User"
 
 const baseItems: Item[] = [
-  { icon: Home, title: "Dashboard", path: "/" },
-  { icon: Package, title: "Productos", path: "/productos" },
-  { icon: ArrowDownToLine, title: "Entradas", path: "/entradas" },
-  { icon: ArrowUpFromLine, title: "Salidas", path: "/salidas" },
-  { icon: FileText, title: "Informes", path: "/informes" },
+  { icon: ChefHat, title: "Dashboard", path: "/" },
+  { icon: Croissant, title: "Productos", path: "/productos" },
+  { icon: Wheat, title: "Entradas", path: "/entradas" },
+  { icon: CakeSlice, title: "Salidas", path: "/salidas" },
+  { icon: ClipboardList, title: "Informes", path: "/informes" },
 ]
 
 export function AppSidebar() {

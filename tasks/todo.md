@@ -212,13 +212,13 @@ Comandos de verificación:
 **Descripción:** `crud.sincronizar_alertas_caducidad` crea una alerta `caducidad`, enlazada a la entrada (`transaccion_id`), cuando un lote vence en `DIAS_AVISO_CADUCIDAD` días o menos (5 por defecto, en `Settings`) y el producto tiene `alerta_caducidad` y stock > 0. Hay una sola alerta por lote, cualquiera que sea su estado, para que una alerta cerrada no reaparezca. Las alertas activas de caducidad del producto se cierran cuando su stock llega a 0. No se cierran al pasar la fecha. La función se llama desde `GET /alertas` y desde `crud.registrar_transaccion`. El dashboard de la Tarea 7 las muestra sin cambios.
 
 **Criterios de aceptación:**
-- [ ] Un lote que vence dentro de 5 días, con stock > 0, genera una sola alerta, aunque `GET /alertas` se llame varias veces
-- [ ] No se genera alerta para un lote que vence en más de 5 días, para un producto sin stock ni para uno con `alerta_caducidad = false`
-- [ ] Una salida que deja el producto en 0 cierra sus alertas de caducidad; un lote ya vencido con stock sigue con la alerta activa
+- [x] Un lote que vence dentro de 5 días, con stock > 0, genera una sola alerta, aunque `GET /alertas` se llame varias veces
+- [x] No se genera alerta para un lote que vence en más de 5 días, para un producto sin stock ni para uno con `alerta_caducidad = false`
+- [x] Una salida que deja el producto en 0 cierra sus alertas de caducidad; un lote ya vencido con stock sigue con la alerta activa
 
 **Verificación:**
-- [ ] Pruebas nuevas en `backend/tests/crud/test_caducidad.py`; `uv run bash scripts/test.sh` pasa
-- [ ] README: quitar "Falta generar la alerta…" de RF-023 y documentar `DIAS_AVISO_CADUCIDAD`
+- [x] Pruebas nuevas en `backend/tests/crud/test_caducidad.py`; `uv run bash scripts/test.sh` pasa
+- [x] README: quitar "Falta generar la alerta…" de RF-023 y documentar `DIAS_AVISO_CADUCIDAD`
 
 **Dependencias:** Ninguna para el backend. La Tarea 7 (B) solo hace falta para ver la alerta en el dashboard.
 
